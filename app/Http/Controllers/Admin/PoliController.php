@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Poli;
 
 class PoliController extends Controller
 {
@@ -12,7 +13,13 @@ class PoliController extends Controller
      */
     public function index()
     {
-        //
+        // Mengambil semua data dari tabel poli
+        $polis = Poli::all();
+
+        // Memanggil file blade index dan mengirimkan data $polis
+        // Catatan: Jika file index.blade.php ada di dalam folder resources/views/admin/, gunakan 'admin.index'.
+        // Jika ada di dalam sub-folder (misal resources/views/admin/poli/), ubah menjadi 'admin.poli.index'
+        return view('admin.polis.index', compact('polis'));
     }
 
     /**
@@ -20,7 +27,8 @@ class PoliController extends Controller
      */
     public function create()
     {
-        //
+        // Memanggil file resources/views/admin/polis/create.blade.php
+        return view('admin.polis.create');
     }
 
     /**
@@ -44,7 +52,11 @@ class PoliController extends Controller
      */
     public function edit(string $id)
     {
-        //
+    // Cari data poli berdasarkan ID-nya
+    $poli = Poli::findOrFail($id);
+        
+    // Panggil file resources/views/admin/polis/edit.blade.php dan kirim datanya
+    return view('admin.polis.edit', compact('poli'));
     }
 
     /**
