@@ -8,70 +8,66 @@ use App\Models\Poli;
 
 class PoliController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Mengambil semua data dari tabel poli
         $polis = Poli::all();
-
-        // Memanggil file blade index dan mengirimkan data $polis
-        // Catatan: Jika file index.blade.php ada di dalam folder resources/views/admin/, gunakan 'admin.index'.
-        // Jika ada di dalam sub-folder (misal resources/views/admin/poli/), ubah menjadi 'admin.poli.index'
         return view('admin.polis.index', compact('polis'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Memanggil file resources/views/admin/polis/create.blade.php
         return view('admin.polis.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Validasi input dari form
+        $request->validate([
+            'nama_poli' => 'required|string|max:255',
+            'keterangan' => 'nullable|string'
+        ]);
+
+        // Simpan ke database
+        Poli::create($request->all());
+
+        // Kembali ke halaman index dengan pesan sukses
+        return redirect()->route('polis.index')->with('success', 'Data Poli berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        return redirect()->route('polis.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-    // Cari data poli berdasarkan ID-nya
-    $poli = Poli::findOrFail($id);
-        
-    // Panggil file resources/views/admin/polis/edit.blade.php dan kirim datanya
-    return view('admin.polis.edit', compact('poli'));
+        $poli = Poli::findOrFail($id);
+        return view('admin.polis.edit', compact('poli'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        // Validasi input dari form edit
+        $request->validate([
+            'nama_poli' => 'required|string|max:255',
+            'keterangan' => 'nullable|string'
+        ]);
+
+        // Cari data dan update
+        $poli = Poli::findOrFail($id);
+        $poli->update($request->all());
+
+        // Kembali ke halaman index dengan pesan sukses
+        return redirect()->route('polis.index')->with('success', 'Data Poli berhasil diubah!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        // Cari data dan hapus
+        $poli = Poli::findOrFail($id);
+        $poli->delete();
+
+        // Kembali ke halaman index dengan pesan sukses
+        return redirect()->route('polis.index')->with('success', 'Data Poli berhasil dihapus!');
     }
 }

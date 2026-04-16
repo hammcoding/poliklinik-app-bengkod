@@ -9,13 +9,16 @@ class Poli extends Model
 {
     use HasFactory;
 
-    protected $table = 'poli';
+    // Pastikan ini sesuai dengan nama tabel di database Anda (biasanya 'poli' atau 'polis')
+    protected $table = 'poli'; 
 
+    // Daftar kolom yang diizinkan untuk diisi melalui form
     protected $fillable = [
         'nama_poli',
         'keterangan',
     ];
 
+    // Fungsi Relasi ke tabel User (Dokter)
     public function dokters()
     {
         return $this->hasMany(User::class, 'id_poli');

@@ -14,14 +14,17 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('alamat');
-            $table->string('no_hp');
             $table->enum('role', ['admin', 'pasien', 'dokter']);
-            $table->string('no_ktp');
-            $table->string('no_rm');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Tambahkan ->nullable() pada kolom-kolom spesifik ini
+            $table->string('alamat')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('no_ktp')->nullable();
+            $table->string('no_rm')->nullable();
+            
             $table->rememberToken();
             $table->timestamps();
         });
@@ -41,10 +44,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
