@@ -102,6 +102,12 @@
                 Dashboard Pasien
             </a>
 
+            <a href="{{ route('pasien.daftar') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('pasien.daftar') ? $active : $inactive }}">
+                <i class="fas fa-house-medical w-4 text-center"></i>
+                Pendaftaran Periksa
+            </a>
+
 
         </div>
         @endif
@@ -120,6 +126,13 @@
                 class="{{ $baseLink }} {{ request()->routeIs('dokter.dashboard') ? $active : $inactive }}">
                 <i class="fas fa-stethoscope w-4 text-center"></i>
                 Dashboard Dokter
+            </a>
+
+            {{-- Tambahan Menu Jadwal Periksa --}}
+            <a href="{{ route('jadwal-periksa.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('jadwal-periksa.*') ? $active : $inactive }}">
+                <i class="fas fa-calendar-alt w-4 text-center"></i>
+                Jadwal Periksa
             </a>
 
         </div>
