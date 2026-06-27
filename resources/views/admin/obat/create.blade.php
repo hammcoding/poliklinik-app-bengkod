@@ -20,9 +20,8 @@
             <form action="{{ route('obat.store') }}" method="POST">
                 @csrf
 
-                {{-- Grid --}}
+                {{-- Grid Baris 1: Nama & Kemasan --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-
                     {{-- Nama Obat --}}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">
@@ -50,28 +49,45 @@
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                 </div>
 
-                {{-- Harga --}}
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">
-                        Harga <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="flex items-center border-2 rounded-lg p-2 px-4 py-2
-                                focus-within:border-primary">
-                        <span class="text-slate-500 text-sm font-semibold mr-2">
-                            Rp
-                        </span>
-                        <input type="number" name="harga" value="{{ old('harga') }}" placeholder="0" min="0" step="1"
-                            class="w-full focus:outline-none
-                                      @error('harga') border-red-500 @enderror" required>
+                {{-- Grid Baris 2: Harga & Stok --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    {{-- Harga --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Harga <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center border-2 rounded-lg p-2 px-4 py-2
+                                    focus-within:border-primary">
+                            <span class="text-slate-500 text-sm font-semibold mr-2">Rp</span>
+                            <input type="number" name="harga" value="{{ old('harga') }}" placeholder="0" min="0" step="1"
+                                class="w-full focus:outline-none
+                                          @error('harga') border-red-500 @enderror" required>
+                        </div>
+                        @error('harga')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    @error('harga')
-                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                    @enderror
+                    {{-- Stok --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Stok Awal <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex items-center border-2 rounded-lg p-2 px-4 py-2
+                                    focus-within:border-primary">
+                            <span class="text-slate-500 text-sm font-semibold mr-2">
+                                <i class="fas fa-boxes"></i>
+                            </span>
+                            <input type="number" name="stok" value="{{ old('stok', 0) }}" placeholder="0" min="0" step="1"
+                                class="w-full focus:outline-none
+                                          @error('stok') border-red-500 @enderror" required>
+                        </div>
+                        @error('stok')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 {{-- Buttons --}}
@@ -79,17 +95,14 @@
                     <button type="submit" class="px-6 py-2.5 rounded-xl bg-primary 
                                hover:bg-primary/90 text-white 
                                font-semibold text-sm transition">
-                        <i class="fas fa-save mr-1"></i>
-                        Simpan
+                        <i class="fas fa-save mr-1"></i> Simpan
                     </button>
-
                     <a href="{{ route('obat.index') }}" class="px-6 py-2.5 rounded-xl bg-slate-100 
                               hover:bg-slate-200 text-slate-600 
                               font-semibold text-sm transition">
                         Batal
                     </a>
                 </div>
-
             </form>
 
         </div>

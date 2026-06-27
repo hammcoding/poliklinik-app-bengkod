@@ -12,6 +12,14 @@
         </h2>
     </div>
 
+    {{-- Alert Error Handling Stok Habis --}}
+    @if(session('error'))
+    <div class="alert alert-error mb-6 rounded-xl shadow-sm text-white flex items-center gap-2 px-4 py-3" style="background-color: #ef4444;">
+        <i class="fas fa-exclamation-triangle text-lg"></i>
+        <span class="font-semibold">{{ session('error') }}</span>
+    </div>
+    @endif
+
     {{-- Card --}}
     <div class="card bg-base-100 shadow-sm rounded-2xl border border-slate-200">
         <div class="card-body p-8">
@@ -28,11 +36,18 @@
                     <select id="select-obat" class="select select-bordered w-full rounded-lg border-2 px-4">
                         <option value="">-- Pilih Obat --</option>
                         @foreach ($obats as $obat)
-                            <option value="{{ $obat->id }}"
-                                data-nama="{{ $obat->nama_obat }}"
-                                data-harga="{{ $obat->harga }}">
-                                {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }}
-                            </option>
+                            {{-- Validasi UI: Kunci opsi jika stok habis --}}
+                            @if($obat->stok <= 0)
+                                <option value="" disabled class="text-red-500 bg-red-50 font-semibold">
+                                    {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }} (Stok Habis!)
+                                </option>
+                            @else
+                                <option value="{{ $obat->id }}"
+                                    data-nama="{{ $obat->nama_obat }}"
+                                    data-harga="{{ $obat->harga }}">
+                                    {{ $obat->nama_obat }} - Rp{{ number_format($obat->harga) }} (Sisa Stok: {{ $obat->stok }})
+                                </option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -101,7 +116,11 @@
             const nama = selectedOption.dataset.nama;
             const harga = parseInt(selectedOption.dataset.harga || 0);
 
-            if (!id || daftarObat.some(o => o.id == id)) return;
+            // Validasi tambahan di Javascript: pastikan id valid dan bukan opsi yang di-disable
+            if (!id || daftarObat.some(o => o.id == id)) {
+                selectObat.selectedIndex = 0;
+                return;
+            }
 
             daftarObat.push({ id, nama, harga });
             renderObat();
@@ -129,7 +148,8 @@
             });
 
             inputBiaya.value = total;
-            totalHargaEl.textContent = `Rp ${total.toLocaleString()}`;
+            // Ditambah Rp 150.000 untuk jasa dokter sesuai controller
+            totalHargaEl.textContent = `Rp ${(total + 150000).toLocaleString()}`;
             inputObatJson.value = JSON.stringify(daftarObat.map(o => o.id));
         }
 

@@ -15,6 +15,7 @@ class Obat extends Model
         'nama_obat',
         'kemasan',
         'harga',
+        'stok', // Tambahkan baris ini
     ];
 
     public function detailPeriksas()
